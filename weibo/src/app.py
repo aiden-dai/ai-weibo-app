@@ -90,6 +90,83 @@ def post():
     return render_template('login.html')
 
 
+@app.route('/viewpost/<post_id>', methods=['GET'])
+def viewpost(post_id):
+    """ Get details of a Post by id, redirect to post detail page"""
+    # if request.method == 'POST':
+    #     if 'username' not in session:
+    #         return render_template('login.html')
+
+    #     message = request.form['message']
+    #     username = session['username']
+    #     user_id = session['user_id']
+
+    #     # Use backend post api - Post
+    #     body = {'user_id': user_id, 'username': username, 'message': message}
+    #     url = '{}/posts'.format(app.config["POST_BASE_URI"])
+    #     response = requests.post(url=url,
+    #                              json=body,
+    #                              headers={'content-type': 'application/json'},
+    #                              timeout=3)
+
+    #     app.logger.info('Get %s with response status code %s',
+    #                     url, response.status_code)
+    #     app.logger.info('Get %s with response text %s', url, response.text)
+
+    #     return redirect(url_for('home'))
+
+    url = '{}/posts/{}'.format(app.config["POST_BASE_URI"], post_id)
+    response = requests.get(url, timeout=3)
+
+    app.logger.info('Get %s with response status code %s',
+                    url, response.status_code)
+    # app.logger.info('Get %s with response text %s', url, response.text)
+
+    post = json.loads(response.text)['data']['post']
+
+    # comments = [{'message': 'Hello'}, {
+    #     'message': 'Hello'}, {'message': 'Hello'}]
+    comments = json.loads(response.text)['data']['comments']
+
+    return render_template('postdetail.html', post=post, comments=comments)
+
+
+@app.route('/comment', methods=['POST'])
+def comment():
+    """ Create a Post, and refresh the current home page"""
+    if request.method == 'POST':
+        if 'username' not in session:
+            return render_template('login.html')
+
+        message = request.form['message']
+        post_id = request.form['post_id']
+        username = session['username']
+        user_id = session['user_id']
+
+        print(post_id)
+        print(user_id)
+
+        # Use backend post api - Post
+        body = {'user_id': user_id,
+                'username': username, 'message': message}
+
+        # url = '{}/posts'.format(app.config["POST_BASE_URI"])
+        url = '{}/posts/{}/comments'.format(app.config["POST_BASE_URI"], post_id)
+        print(url)
+        response = requests.post(url=url,
+                                 json=body,
+                                 headers={'content-type': 'application/json'},
+                                 timeout=3)
+
+        app.logger.info('Get %s with response status code %s',
+                        url, response.status_code)
+        app.logger.info('Get %s with response text %s', url, response.text)
+
+        return redirect('/viewpost/' + post_id)
+    return render_template('login.html')
+
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     """ Verify the login info,
@@ -132,7 +209,7 @@ def login():
             return redirect(url_for('home'))
 
         else:
-            msg = 'Invalid username or password'
+            msg = 'Invalid username or password, please try again'
 
     return render_template('login.html', msg=msg)
 

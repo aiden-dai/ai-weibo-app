@@ -25,7 +25,7 @@
 
       {% if session['username'] %}
       <li class="nav-item">
-        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Welcome {{ session['username'] }}</a>
+        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">{{ session['username'] }}</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="/home">Home</a>
@@ -53,8 +53,10 @@
 
     {% block content %}{% endblock %}
 
-  </main>
+    
 
+  </main>
+  
   <script src="{{ url_for('static', filename='jquery-3.4.1.slim.min.js') }}"></script>
   <script src="{{ url_for('static', filename='bootstrap.bundle.min.js') }}"></script>
 </body>
