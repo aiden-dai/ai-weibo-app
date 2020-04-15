@@ -1,0 +1,60 @@
+<!doctype html>
+<head>
+  <title>My Weibo</title>
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  <meta http-equiv="Cache" content="no-cache">
+  
+  <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+  {% block header %}{% endblock %}
+</head>
+
+<body class="bg-light">
+
+  <nav class="navbar fixed-top navbar-light bg-light">
+    <a class="navbar-brand" href="/">
+      <img src="{{ url_for('static', filename='bootstrap-solid.svg') }}" width="30" height="30" class="d-inline-block align-top" alt="">
+      My Weibo
+    </a>
+    <ul class="nav justify-content-end">
+      <!-- <li class="nav-item">
+        <a class="nav-link active" href="#">Active</a>
+      </li> -->
+
+      {% if session['username'] %}
+      <li class="nav-item">
+        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Welcome {{ session['username'] }}</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/home">Home</a>
+      </li>
+      <!-- <li class="nav-item">
+        <a class="nav-link" href="/home">Profile</a>
+      </li> -->
+      <li class="nav-item">
+        <a class="nav-link" href="/logout">Logout</a>
+      </li>
+     
+      {% else %}
+      <li class="nav-item">
+        <a class="nav-link" href="/login">Login</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/register">Register</a>
+      </li>
+      {% endif %}
+    
+    </ul>
+  </nav>
+
+  <main role="main" class="container">
+
+    {% block content %}{% endblock %}
+
+  </main>
+
+  <script src="{{ url_for('static', filename='jquery-3.4.1.slim.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='bootstrap.bundle.min.js') }}"></script>
+</body>
