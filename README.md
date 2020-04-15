@@ -1,44 +1,28 @@
 # ai-weibo-py
 
-This repo contains a python implementation of the guestbook application (using Flask + Redis).
+This repo is to create a sample Weibo (Twitter) app using Flask and Redis
 
+## Major Features
 
-## Run the app locally:
+- User Management 
+    - Login / Logout
+    - Register
+    - Follower / Following (TODO)
 
-1. Start redis
-```bash
-docker run --rm -p 6379:6379 --name my-redis -d redis
-```
+- Post Management
+    - Create Post
+    - List Posts
+    - Delete Posts (TODO)
+    - Comment (TODO)
+    - Like (TODO)
 
-2. Build the docker image
-```
-docker build -t my-guestbook-py .
-```
+## Screenshot
 
-3. Run the guestbook app
-```bash
-docker run --rm -p 8080:8080 --name my-guestbook  --link my-redis:redis my-guestbook-py
-```
+Login Page
 
-## Run the app in kubernetes (local cluster) with Istio Ingress:
+<img src="login.png">
 
-```bash
-kubectl create ns demo
-kubectl label ns demo istio-injection=enabled
-```
+Home Page
 
-- Use kubectl
-```bash
-kubectl config set-context --current --namespace=demo
-kubectl apply -f manifests/redis.yaml
-kubectl apply -f manifests/guestbook.yaml
-kubectl apply -f manifests/ingress.yaml
-```
+<img src="home.png">
 
-
-- Use skaffold
-```bash
-# run in local-cluster
-skaffold config set --global local-cluster true
-skaffold run -n demo
-```
